@@ -4,11 +4,14 @@ const seventyFive = document.getElementById('75');
 const oneHundred = document.getElementById('100');
 const timer = document.getElementById('timer');
 const start = document.getElementById('start');
+const title = document.getElementById('title')
 
 let startStatus = false;
 let startTime, elapsedTime = 0, totalMilliseconds;
 let firstTime = true
 let restStatus = false;
+let msForSound;
+let sessionTimeout;
 
 const sessionAudio = new Audio('sound/session.mp3');
 sessionAudio.playbackRate = 1.5;
@@ -31,7 +34,7 @@ const buttonAudioList = [button1Audio, button2Audio, button3Audio, button4Audio]
 
 const buttonList = [twentyFive, fifty, seventyFive, oneHundred];
 const timeList = ["25:00", "50:00", "75:00", "100:00"];
-const minList = [5, 50, 75, 100];
+const minList = [25, 50, 75, 100];
 
 let min = 0;
 let rest = 0;
@@ -39,6 +42,7 @@ let sec = 60;
 
 buttonList.forEach((button, index) => {
     button.addEventListener("click", function() {
+        clearInterval(sessionTimeout);
         buttonAudioList[index].play();
         timer.innerHTML = timeList[index];
         min = minList[index];
@@ -67,16 +71,14 @@ function updateTimer() {
         startTime = now;
 
         const remainingTime = totalMilliseconds - elapsedTime;
+        msForSound = remainingTime
         const remainingMinutes = Math.floor(remainingTime / 60000);
-        console.log(remainingMinutes);
         const remainingSeconds = Math.floor((remainingTime % 60000) / 1000) ;
-        console.log(remainingSeconds)
 
         timer.innerHTML = (remainingMinutes < 10 ? "0" : "") + remainingMinutes + ":" + (remainingSeconds < 10 ? "0" : "") + (remainingSeconds === 60? "00" : remainingSeconds);
 
         if (remainingTime <= 0) {
             if(restStatus){
-                sessionAudio.play();
                 start.classList.add('hover:bg-gray-600');
                 start.classList.remove('hover:bg-gray-800');
                 start.classList.add('bg-slate-100');
@@ -94,7 +96,6 @@ function updateTimer() {
                 start.innerHTML = "START";
             } else {
                 timer.innerHTML = "00:00";
-                sessionAudio.play();
                 start.classList.add('hover:bg-gray-600');
                 start.classList.remove('hover:bg-gray-800');
                 start.classList.add('bg-slate-100');
@@ -132,12 +133,19 @@ start.addEventListener('click', function() {
                     requestAnimationFrame(updateTimer);
                     firstTime = false
                 }, 1000);
+                sessionTimeout = setTimeout(() => {
+                    sessionAudio.play()
+                }, min * 60000);
             }
             if(!firstTime){
                 requestAnimationFrame(updateTimer);
+                sessionTimeout = setTimeout(() => {
+                    sessionAudio.play()
+                }, msForSound)
             }
             start.innerHTML = "PAUSE";
         } else if (start.innerHTML === "PAUSE") {
+            clearInterval(sessionTimeout);
             pauseAudio.play();
             changeColor()
             startStatus = false;
