@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">pomodoro</title>
+    <link href="./src/output.css" rel="stylesheet">
+</head>
+<body>
+    <container class="flex flex-col justify-center h-screen items-center bg-gray-500">
+        <div class="content-container mb-20 flex flex-col justify-center items-center">
+            
+            <h1 class="font-bold text-5xl text-gray-100 mb-7">pomodoro</h1>
+            <div class="button-container text-gray-100 grid grid-flow-col gap-6">
+                <button class=" rounded-md px-4 py-2 font-bold hover:bg-gray-600 transition-all duration-200 
+                outline-none shadow-md text-xl select-none" 
+                    id="25">25 min</button>
+                <button class=" rounded-md px-4 py-2 font-bold hover:bg-gray-600 transition-all duration-200 
+                outline-none shadow-md text-xl select-none"
+                    id="50">50 min</button>
+                <button class=" rounded-md px-4 py-2 font-bold hover:bg-gray-600 transition-all duration-200 
+                outline-none shadow-md text-xl select-none"
+                    id="75">75 min</button>
+                <button class=" rounded-md px-4 py-2 font-bold hover:bg-gray-600 transition-all duration-200 
+                outline-none shadow-md text-xl select-none"
+                    id="100">100 min</button>
+            </div>
+            <h2 class="font-bold text-gray-100 p-4 text-9xl mb-6 select-none" id="timer">00:00</h2>
+            <button class="bg-slate-100 font-bold px-6 py-3 rounded-lg text-2xl text-gray-600 hover:bg-gray-600 
+             hover:text-slate-100 select-none"
+                id="start">START</button>
+        </div>    
+    </container>
+
+</body>
+<script src="index.js"></script>
+</html>

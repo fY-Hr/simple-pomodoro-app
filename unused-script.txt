@@ -1,0 +1,124 @@
+const twentyFive = document.getElementById('25');
+const fifty = document.getElementById('50');
+const seventyFive = document.getElementById('75');
+const oneHundred = document.getElementById('100');
+const timer = document.getElementById('timer');
+const start = document.getElementById('start');
+
+let startStatus = false;
+let runTimer;
+
+const startAudio = new Audio('sound/start-sound.mp3')
+const pauseAudio = new Audio('sound/start-sound.mp3')
+startAudio.playbackRate = 5.0
+pauseAudio.playbackRate = 5.0
+
+const button1Audio = new Audio('sound/button-sound.mp3');
+const button2Audio = new Audio('sound/button-sound.mp3');
+const button3Audio = new Audio('sound/button-sound.mp3');
+const button4Audio = new Audio('sound/button-sound.mp3');
+button1Audio.playbackRate = 5.0
+button2Audio.playbackRate = 5.0
+button3Audio.playbackRate = 5.0
+button4Audio.playbackRate = 5.0
+
+const buttonAudioList = [button1Audio, button2Audio, button3Audio, button4Audio]
+
+const buttonList = [twentyFive, fifty, seventyFive, oneHundred]
+const timeList = ["25:00", "50:00", "75:00", "100:00"]
+const minList = [25, 50, 75, 100]
+
+let min = 0
+let sec = 60
+let ms = 100
+
+buttonList.forEach((button, index) => {
+    button.addEventListener("click", function(){
+        buttonAudioList[index].play()
+        timer.innerHTML = timeList[index];
+        min = minList[index]
+        sec = 60
+        ms = 100
+        start.classList.add('hover:bg-gray-600')
+        start.classList.remove('hover:bg-gray-800')
+        start.classList.add('bg-slate-100')
+        start.classList.remove('bg-gray-600')
+        start.classList.add('text-gray-600')
+        start.classList.remove('text-slate-100')
+        startStatus = false
+        setTimer()
+        start.innerHTML = "START"
+    })
+})
+
+
+
+function setTimer(){
+
+     if (startStatus){
+        runTimer = setInterval(function(){
+            if(ms > 0){
+                ms--
+            }
+            if(sec === 0){
+                sec = 60
+                timer.innerHTML = min + ":" + "00"
+            }
+            if(ms === 0){
+                ms = 100
+                sec--
+                if(sec === 59){
+                    min--
+                }
+                timer.innerHTML = (min < 10? "0": min) + ":" + (sec < 10? "0" : "") + sec
+            }
+            if(sec === 0 && min === 0){
+                timer.innerHTML = "00:00";
+            }
+
+        }, 10)
+    } else{
+        timer.innerHTML = min+":" + (sec < 10? "0" : "") + (sec === 60? "00" : sec);
+        clearInterval(runTimer);
+    }
+
+}
+
+start.addEventListener('click', function(){
+    if(timer.innerHTML != "00:00"){
+        if(start.innerHTML === "START"){
+            startAudio.play()
+            start.classList.remove('bg-slate-100')
+            start.classList.add('bg-gray-600')
+            start.classList.remove('text-gray-600')
+            start.classList.add('text-slate-100')
+            start.classList.remove('hover:bg-gray-600')
+            start.classList.add('hover:bg-gray-800')
+            startStatus = true
+            setTimer()
+            start.innerHTML = "PAUSE"
+        } else if(start.innerHTML === "PAUSE"){
+            pauseAudio.play()
+            start.classList.add('hover:bg-gray-600')
+            start.classList.remove('hover:bg-gray-800')
+            start.classList.add('bg-slate-100')
+            start.classList.remove('bg-gray-600')
+            start.classList.add('text-gray-600')
+            start.classList.remove('text-slate-100')
+            startStatus = false
+            setTimer()
+            start.innerHTML = "START"
+
+        }
+    }
+})
+
+
+
+
+
+
+
+
+
+
