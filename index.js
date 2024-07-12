@@ -62,6 +62,7 @@ buttonList.forEach((button, index) => {
         restStatus = true;
         start.innerHTML = "START";
         sessionType.innerHTML = "";
+        title.innerHTML = "pomodoro";
     });
 });
 
