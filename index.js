@@ -4,7 +4,8 @@ const seventyFive = document.getElementById('75');
 const oneHundred = document.getElementById('100');
 const timer = document.getElementById('timer');
 const start = document.getElementById('start');
-const title = document.getElementById('title')
+const title = document.getElementById('title');
+const sessionType = document.getElementById('session-type');
 
 let startStatus = false;
 let startTime, elapsedTime = 0, totalMilliseconds;
@@ -60,6 +61,7 @@ buttonList.forEach((button, index) => {
         firstTime = true
         restStatus = true;
         start.innerHTML = "START";
+        sessionType.innerHTML = "";
     });
 });
 
@@ -94,6 +96,9 @@ function updateTimer() {
                 restStatus = false;
                 timer.innerHTML = (rest < 10? "0" : "") + rest + ":" + "00";
                 start.innerHTML = "START";
+                sessionType.innerHTML = "Take a Break!";
+                title.innerHTML = "Take a Break!"
+
             } else {
                 timer.innerHTML = "00:00";
                 start.classList.add('hover:bg-gray-600');
@@ -143,12 +148,18 @@ start.addEventListener('click', function() {
                     sessionAudio.play()
                 }, msForSound)
             }
+            if(restStatus){
+                sessionType.innerHTML = "Time to Focus!";
+                title.innerHTML = "Time to Focus!";
+            }
             start.innerHTML = "PAUSE";
         } else if (start.innerHTML === "PAUSE") {
             clearInterval(sessionTimeout);
             pauseAudio.play();
             changeColor()
             startStatus = false;
+            sessionType.innerHTML = "Paused.";
+            title.innerHTML = "Paused.";
             start.innerHTML = "START";
         }
     }
