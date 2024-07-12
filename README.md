@@ -6,6 +6,6 @@ clone guide (run in your cmd):
 
 > git clone https://github.com/fY-Hr/simple-pomodoro-app
 
-> cd pomodoro
+> cd simple-pomodoro-app
 
 > start index.html
