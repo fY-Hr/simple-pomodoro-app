@@ -160,26 +160,19 @@ start.addEventListener('click', function() {
                     if(sessionCount === 4){
                         sessionCount = 0;    
                     }
-                        sessionCount ++
-                    
-                    console.log(sessionCount);
-                    // sessionTimeout = setTimeout(() => {
-                    //     sessionAudio.play()
-                    //     console.log("ini yang true");
-                    // }, min * 60000);
+                    sessionCount ++                    
+                    // console.log(sessionCount);
                 }
                 if(!restStatus){
                     if(sessionCount === 4){
                         sessionTimeout = setTimeout(() => {
                             sessionAudio.play()
                             title.innerHTML = "Time to Focus!"
-                            console.log("ini yang false rest")
                         }, min / 5 * 120000);
                     } else {
                         sessionTimeout = setTimeout(() => {
                             sessionAudio.play()
                             title.innerHTML = "Time to Focus!"
-                            console.log("ini yang false normal")
                         }, min / 5 * 60000);
                     }
                     
@@ -193,7 +186,6 @@ start.addEventListener('click', function() {
                                 title.innerHTML = "Take a Break!"
                             }
                         }
-                        console.log("ini yang false else")
                     }, min * 60000);
                 }
             }
@@ -201,7 +193,6 @@ start.addEventListener('click', function() {
                 requestAnimationFrame(updateTimer);
                 sessionTimeout = setTimeout(() => {
                     sessionAudio.play()
-                    console.log("ini yang false first time")
                     if(!restStatus){
                         title.innerHTML = "Time to Focus!"
                     } else if(restStatus){
