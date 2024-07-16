@@ -13,6 +13,8 @@ let firstTime = true
 let restStatus = false;
 let msForSound;
 let sessionTimeout;
+let sessionCount = 0;
+let sessionComplete = false;
 
 const sessionAudio = new Audio('sound/session.mp3');
 sessionAudio.playbackRate = 1.5;
@@ -58,6 +60,7 @@ buttonList.forEach((button, index) => {
         startTime = null;
         elapsedTime = 0;
         totalMilliseconds = min * 60000;
+        sessionCount = 0
         firstTime = true
         restStatus = true;
         start.innerHTML = "START";
@@ -91,17 +94,24 @@ function updateTimer() {
                 startStatus = false;
                 startTime = null;
                 elapsedTime = 0;
-                rest = min / 5;
+                if(sessionCount === 4){
+                    rest = (min / 5) * 2;
+                    sessionType.innerHTML = "It's Time for a Long Break!!";
+                    title.innerHTML = "It's Time for a Long Break!"
+                } else {
+                    rest = min / 5;
+                    sessionType.innerHTML = "Take a Break!";
+                    title.innerHTML = "Take a Break!"
+                }
                 totalMilliseconds = rest * 60000;
                 firstTime = true;
                 restStatus = false;
                 timer.innerHTML = (rest < 10? "0" : "") + rest + ":" + "00";
                 start.innerHTML = "START";
-                sessionType.innerHTML = "Take a Break!";
-                title.innerHTML = "Take a Break!"
 
             } else {
-                timer.innerHTML = "00:00";
+                timer.innerHTML = (min < 10? "0" : "") + min+":"+"00";
+                totalMilliseconds = min * 60000;
                 start.classList.add('hover:bg-gray-600');
                 start.classList.remove('hover:bg-gray-800');
                 start.classList.add('bg-slate-100');
@@ -109,6 +119,12 @@ function updateTimer() {
                 start.classList.add('text-gray-600');
                 start.classList.remove('text-slate-100');
                 startStatus = false;
+                restStatus = true;
+                firstTime = true;
+                startTime = null;
+                elapsedTime = 0;
+                sessionType.innerHTML = "Time to Focus!";
+                title.innerHTML = "Time to Focus!";
                 start.innerHTML = "START";
             }
         } else {
@@ -138,16 +154,76 @@ start.addEventListener('click', function() {
                     startTime = Date.now();
                     requestAnimationFrame(updateTimer);
                     firstTime = false
+                    
                 }, 1000);
-                sessionTimeout = setTimeout(() => {
-                    sessionAudio.play()
-                }, min * 60000);
+                if(restStatus){
+                    if(sessionCount === 4){
+                        sessionCount = 0;    
+                    }
+                        sessionCount ++
+                    
+                    console.log(sessionCount);
+                    // sessionTimeout = setTimeout(() => {
+                    //     sessionAudio.play()
+                    //     console.log("ini yang true");
+                    // }, min * 60000);
+                }
+                if(!restStatus){
+                    if(sessionCount === 4){
+                        sessionTimeout = setTimeout(() => {
+                            sessionAudio.play()
+                            title.innerHTML = "Time to Focus!"
+                            console.log("ini yang false rest")
+                        }, min / 5 * 120000);
+                    } else {
+                        sessionTimeout = setTimeout(() => {
+                            sessionAudio.play()
+                            title.innerHTML = "Time to Focus!"
+                            console.log("ini yang false normal")
+                        }, min / 5 * 60000);
+                    }
+                    
+                } else {
+                    sessionTimeout = setTimeout(() => {
+                        sessionAudio.play()
+                        if(restStatus){
+                            if(sessionCount === 4){
+                                title.innerHTML = "It's Time for a Long Break!!"
+                            } else {
+                                title.innerHTML = "Take a Break!"
+                            }
+                        }
+                        console.log("ini yang false else")
+                    }, min * 60000);
+                }
             }
             if(!firstTime){
                 requestAnimationFrame(updateTimer);
                 sessionTimeout = setTimeout(() => {
                     sessionAudio.play()
+                    console.log("ini yang false first time")
+                    if(!restStatus){
+                        title.innerHTML = "Time to Focus!"
+                    } else if(restStatus){
+                        if(sessionCount === 4){
+                            title.innerHTML = "It's Time for a Long Break!!"
+                        } else {
+                            title.innerHTML = "Take a Break!"
+                        }
+                    }
                 }, msForSound)
+                if(!restStatus){
+                    if(sessionCount === 4){
+                        title.innerHTML = "It's Time for a Long Break!!"
+                        sessionType.innerHTML = "It's Time for a Long Break!!"
+                    } else {
+                        title.innerHTML = "Take a Break!"
+                        sessionType.innerHTML = "Take a Break!"
+                    }
+                } else if(restStatus){
+                    title.innerHTML = "Time to Focus!"
+                    sessionType.innerHTML = "Time to Focus!"
+                }
             }
             if(restStatus){
                 sessionType.innerHTML = "Time to Focus!";
